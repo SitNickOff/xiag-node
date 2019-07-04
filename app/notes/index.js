@@ -4,6 +4,10 @@ const controller = require('./controller');
 
 const router = Router();
 
+router.param('id', controller.findOne);
+
+router.use(controller.getCollection);
+
 router.get('/', controller.showIndex);
 
 router.route('/create')

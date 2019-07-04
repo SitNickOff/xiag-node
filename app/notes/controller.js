@@ -1,54 +1,69 @@
 const { ObjectID } = require('mongodb');
 
 module.exports = {
-    showIndex: async (req, res) => {
-        const client = req.app.client;
-    
-        //await client.connect();
-    
-        const db = client.db('xiag-poll');
-        const collection = db.collection('questions');
-        const questions = await collection.find().toArray();
-    
-        //client.close();
-    
-        res.render('notes/views/index', { notes: questions});
+    getCollection: (req, res, next) => {
+        req.questions = req.app.database.collection('questions');
+
+        next();
     },
 
-    showView: async (req, res) => {
-        const client = req.app.client;
-
-        const db = client.db('xiag-poll');
-        const collection = db.collection('questions');
-        const question = await collection.findOne({ _id: ObjectID(req.params.id) });
+    findOne: async (req, res, next) => {        
+        const question = await req.questions.findOne({ _id: ObjectID(req.params.id) });
 
         if (!question) return res.redirect('/'); 
 
-        res.render('notes/views/view', {note: question});
+        req.question = question;
+
+        next();
+    },
+
+    showIndex: async (req, res) => {
+        const questions = await req.questions.find().toArray();
+    
+        res.render('notes/views/index', { 
+            notes: questions 
+        });
+    },
+
+    showView: async (req, res) => {
+        res.render('notes/views/view', { 
+            note: req.question 
+        });
     },
 
     showCreate: (req, res) => {
         res.render('notes/views/create');
     },
 
+    showUpdate: async (req, res)=>{
+        res.render('notes/views/update', { 
+            note: req.question 
+        });
+    },
+
+    showDelete: async (req, res)=>{
+        res.render('notes/views/delete', { 
+            note: req.question 
+        });
+    },
+
     create: async (req, res) => {
         const question = req.body;
 
-        const client = req.app.client;
-
-        // await client.connect();
-
-        const db = client.db('xiag-poll');
-        const collection = db.collection('questions');
-        await collection.insertOne(question);
-
-        // client.close();
+        await req.questions.insertOne(question);
 
         res.redirect('/');
     },
 
-    showUpdate: ()=>{},
-    update: ()=>{},
-    showDelete: ()=>{},
-    delete: ()=>{}
+    update: async (req, res)=>{
+        await req.questions.updateOne({ _id: ObjectID(req.params.id) } , { $set: req.body });
+
+        res.redirect(`/notes/${req.params.id}`)
+    },
+    
+    delete: async (req, res)=>{
+        await req.questions.deleteOne({ _id: ObjectID(req.params.id) });
+
+        res.redirect('/notes');
+    }
 };
