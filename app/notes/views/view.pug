@@ -3,10 +3,11 @@ extends /index
 block header
     h1.title= note.title
 
+    
+    
+block main
     div.buttons
         a.button(href='/notes') Назад
         a.button(href=`/notes/${note._id}/update`) Редактировать
         a.button.is-danger(href=`/notes/${note._id}/delete`) Удалить
-    
-block main
     div.content= note.content

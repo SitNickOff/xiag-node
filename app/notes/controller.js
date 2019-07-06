@@ -10,7 +10,7 @@ module.exports = {
     findOne: async (req, res, next) => {        
         const question = await req.questions.findOne({ _id: ObjectID(req.params.id) });
 
-        if (!question) return res.redirect('/'); 
+        if (!question) return res.redirect('/notes'); 
 
         req.question = question;
 
@@ -52,7 +52,7 @@ module.exports = {
 
         await req.questions.insertOne(question);
 
-        res.redirect('/');
+        res.redirect('/notes');
     },
 
     update: async (req, res)=>{

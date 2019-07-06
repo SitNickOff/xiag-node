@@ -1,7 +1,10 @@
+const EventEmmiter = require('events');
 const { MongoClient } = require('mongodb');
 
-class Database {
+class Database extends EventEmmiter {
     constructor(url) {
+        super();
+
         this._client = new MongoClient(url, {useNewUrlParser: true});
         this._db = null;
     }
@@ -11,11 +14,15 @@ class Database {
 
         this._db = this._client.db(name);
 
+        this.emit('connect');
+
         return this._db;
     }
 
     async close() {
-        return await this._client.close();
+        await this._client.close();
+
+        this.emit('disconnect');
     }
 
     collection(name) {

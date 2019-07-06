@@ -8,8 +8,16 @@ html(lang='ru')
         title= title
         link(rel="stylesheet", href="/styles.css")
     body
-        header#header
-            block header
+        div.page
+            div.page__header
+                div.page__logo
+                    a(href='https://www.xiag.ch' target='_blank')
+                        img(src='https://test-task.xiag.ch/images/page-logo.png' alt='XIAG AG')
+                div.page__task-name Poll website task
 
-        main.section
-            block main
+            div.page__image
+                div.page__task-title Poll website task: HTML example 2
+                    block header
+
+            div.page__content.page__content--padding
+                block main

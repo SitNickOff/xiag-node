@@ -5,12 +5,37 @@ block header
 
 block main
     form(method='POST')
-        div.field
-            input.input(type='text' name='title' placeholder='Название' required)
-        
-        div.field    
-            textarea.textarea(name='content' placeholder='Содержание вопроса' required)
+            div.field
+                input.input(type='text' name='title' placeholder='Название' required)
+            
+            div.field    
+                textarea.textarea(name='content' placeholder='Содержание вопроса' required)
 
-        div.buttons    
-            a.button(href='/notes') Отменить
-            button.button.is-primary(type='submit') Создать
+            div.buttons    
+                a.button(href='/notes') Отменить
+                button.button.is-primary(type='submit') Создать
+
+    div.poll
+        table.poll-table
+            thead
+                tr
+                    th Question
+                    th
+                        input.input-text(type='text' value='Where do we go out tonight?' required)
+            tbody
+                tr
+                    td Answer 1:
+                    td
+                        input.input-text(type='text' value='Yes' required)
+                tr
+                    td Answer 2:
+                    td
+                        input.input-text(type='text' value='No' required)
+                tr
+                    td.poll-table__plus
+                        button.btn.btn--plus +
+                    td
+
+        button.btn.btn--start Start
+
+        
