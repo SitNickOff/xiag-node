@@ -11,4 +11,4 @@ Installation:
     3. To start the server, run:
             npm start
     4. To start using go to
-            http://localhost:5000 Abyfkmy
+            http://localhost:5000 
