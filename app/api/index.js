@@ -15,6 +15,8 @@ router.get('/', controller.getList);
 
 router.post('/create', controller.create);
 
+router.post('/getByArray', controller.getListByArray);
+
 router.get('/:id/get', controller.get);
 
 router.post('/:id/update', controller.update);

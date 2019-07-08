@@ -7,8 +7,9 @@ module.exports = {
         next();
     },
 
-    findOne: async (req, res, next) => {        
-        const question = await req.questions.findOne({ _id: ObjectID(req.params.id) });
+    findOne: async (req, res, next) => {   
+        
+        const question = await req.questions.findOne({ _id:ObjectID(req.params.id)});      
 
         if (!question) return res.sendStatus(404); 
 
@@ -23,6 +24,14 @@ module.exports = {
 
         res.send(questions);
         
+    },
+
+    getListByArray: async (req, res) => {
+        const questions = req.body.map(quest=>{_id:quest._id});        
+
+        const result = await req.questions.find(questions).toArray();
+
+        res.send(result);
     },
 
     create: async (req, res) => {

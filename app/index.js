@@ -1,6 +1,7 @@
 const express = require('express');
+const path = require('path');
 //const morgan = require('morgan');
-const notes = require('./notes');
+//const notes = require('./notes');
 const api = require('./api');
 
 const app = express();
@@ -22,7 +23,11 @@ app.use(express.urlencoded({extended: true}));
 //     res.redirect('/notes');
 // });
 
-app.use('/notes', notes);
+// app.use('/notes', notes);
 app.use('/api', api);
+
+app.get('*', (req,res) =>{
+    res.sendFile(path.join(__dirname+'/../public/index.html'));
+});
 
 module.exports = app;

@@ -1,5 +1,5 @@
 const express = require('express');
-
+const WebSocket = require('ws')
 
 const Database = require('./database');
 
@@ -12,6 +12,7 @@ database.on('disconnect', ()=>console.log('Подключение к базе д
 const app = require('./app');
 
 const server = express();
+const wsServer = new WebSocket.Server({port: 5001});
 
 server.database = database;
 
@@ -29,6 +30,16 @@ server.use((req, res, next)=>{
 server.use(app);
 
 server.listen(5000, () => console.log('Сервер работает'));
+
+wsServer.on('connection', ws => {
+    ws.on('message', message => {
+        wsServer.clients.forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(message);
+            }    
+        });
+    });
+});
 
 process.on('SIGINT', () => {
     database.close().then(() => process.exit(0));
