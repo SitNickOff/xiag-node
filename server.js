@@ -1,9 +1,10 @@
 const express = require('express');
-const WebSocket = require('ws')
+const WebSocket = require('ws');
 
+const Settings = require('./config');
 const Database = require('./database');
 
-const database = new Database('mongodb://localhost:27017');
+const database = new Database(Settings.MongоDBHost);
 
 database.connect('xiag-poll');
 database.on('connect', ()=>console.log('Подключение к базе данных установлено'));
@@ -12,7 +13,7 @@ database.on('disconnect', ()=>console.log('Подключение к базе д
 const app = require('./app');
 
 const server = express();
-const wsServer = new WebSocket.Server({port: 5001});
+const wsServer = new WebSocket.Server({port: Settings.WebSocketPort});
 
 server.database = database;
 
@@ -29,7 +30,7 @@ server.use((req, res, next)=>{
 
 server.use(app);
 
-server.listen(5000, () => console.log('Сервер работает'));
+server.listen(Settings.ServerPort, () => console.log('Сервер работает'));
 
 wsServer.on('connection', ws => {
     ws.on('message', message => {
